@@ -36,7 +36,7 @@ func readPlaces() -> [Node] {
     return places
 }
 
-func getLongestPath(nodes: [Node], nodeId: Int, visited: inout [Bool]) -> Int {
+func getLongestPath(nodes: inout [Node], nodeId: Int, visited: inout [Bool]) -> Int {
     visited[nodeId] = true
 
     var max = 0
@@ -45,7 +45,7 @@ func getLongestPath(nodes: [Node], nodeId: Int, visited: inout [Bool]) -> Int {
             continue
         }
 
-        let dist = neighbour.cost + getLongestPath(nodes: nodes, nodeId: neighbour.dest, visited: &visited)
+        let dist = neighbour.cost + getLongestPath(nodes: &nodes, nodeId: neighbour.dest, visited: &visited)
         if dist > max {
             max = dist
         }
@@ -56,14 +56,14 @@ func getLongestPath(nodes: [Node], nodeId: Int, visited: inout [Bool]) -> Int {
     return max
 }
 
-func getLongestPath(nodes: [Node]) -> Int {
+func getLongestPath(nodes: inout [Node]) -> Int {
     var visited = Array<Bool>(repeating: false, count: nodes.count)
-    return getLongestPath(nodes: nodes, nodeId: 0, visited: &visited)
+    return getLongestPath(nodes: &nodes, nodeId: 0, visited: &visited)
 }
 
-let nodes = readPlaces()
+var nodes = readPlaces()
 let startTime = CACurrentMediaTime()
-let length = getLongestPath(nodes: nodes)
+let length = getLongestPath(nodes: &nodes)
 let endTime = CACurrentMediaTime()
 let ms = Int((endTime - startTime) * 1000)
 print("\(length) LANGUAGE Swift \(ms)")
